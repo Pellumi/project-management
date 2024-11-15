@@ -56,3 +56,89 @@ model Feedback {
   businessUnit String
   createdAt   DateTime @default(now())
 }
+
+model Reservation {
+  id           String   @id @default(uuid())
+  customerName String
+  date         DateTime
+  time         String
+  tableNumber  Int
+  guestCount   Int
+  createdAt    DateTime @default(now())
+}
+
+model RestaurantOrder {
+  id          String         @id @default(uuid())
+  tableNumber Int
+  items       OrderItem[]
+  totalAmount Float
+  status      String
+  createdAt   DateTime       @default(now())
+  bill        RestaurantBill?
+}
+
+model OrderItem {
+  id        String          @id @default(uuid())
+  name      String
+  quantity  Int
+  price     Float
+  orderId   String
+  order     RestaurantOrder @relation(fields: [orderId], references: [id])
+}
+
+model RestaurantBill {
+  id            String          @id @default(uuid())
+  orderId       String          @unique
+  order         RestaurantOrder @relation(fields: [orderId], references: [id])
+  paymentMethod String
+  status        String
+  createdAt     DateTime        @default(now())
+}
+
+model Book {
+  id        String         @id @default(uuid())
+  title     String
+  author    String
+  isbn      String        @unique
+  price     Float
+  quantity  Int
+  purchases BookPurchase[]
+}
+
+model BookPurchase {
+  id          String       @id @default(uuid())
+  bookId      String
+  book        Book        @relation(fields: [bookId], references: [id])
+  quantity    Int
+  totalAmount Float
+  customerId  String
+  createdAt   DateTime    @default(now())
+  return      BookReturn?
+}
+
+model BookReturn {
+  id         String       @id @default(uuid())
+  purchaseId String       @unique
+  purchase   BookPurchase @relation(fields: [purchaseId], references: [id])
+  reason     String
+  status     String
+  createdAt  DateTime     @default(now())
+}
+
+model WaterProduction {
+  id            String   @id @default(uuid())
+  batchNumber   String   @unique
+  quantity      Int
+  productionDate DateTime
+  status        String
+  createdAt     DateTime @default(now())
+}
+
+model WaterDistribution {
+  id           String   @id @default(uuid())
+  destination  String
+  quantity     Int
+  deliveryDate DateTime
+  status       String
+  createdAt    DateTime @default(now())
+}
