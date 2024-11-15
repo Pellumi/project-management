@@ -102,11 +102,9 @@ Authorization
 - **URL:** `/inventory`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
-- ## **Query Parameters:**
+- **Query Parameters:**
 
-businessUnit
-
-(optional)
+  - `businessUnit (optional)`
 
 - **Response:**
   ```json
@@ -180,11 +178,9 @@ businessUnit
 - **URL:** `/sales/daily`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
-- ## **Query Parameters:**
+- **Query Parameters:**
 
-businessUnit
-
-(optional)
+  - `businessUnit (optional)`
 
 - **Response:**
   ```json
@@ -230,11 +226,9 @@ businessUnit
 - **URL:** `/feedback`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
-- ## **Query Parameters:**
+- **Query Parameters:**
 
-businessUnit
-
-(optional)
+  - `businessUnit (optional)`
 
 - **Response:**
   ```json
@@ -256,11 +250,9 @@ businessUnit
 - **URL:** `/reports/daily`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
-- ## **Query Parameters:**
+- **Query Parameters:**
 
-businessUnit
-
-(optional)
+  - `businessUnit (optional)`
 
 - **Response:**
   ```json
