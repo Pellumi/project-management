@@ -20,6 +20,62 @@ Authorization
 : Bearer <token>
 ```
 
+## Role-Based Access Control
+
+The API implements the following user roles with different levels of access:
+
+### Available Roles
+
+- ADMIN: System administrator
+- MANAGER: Business unit manager
+- STAFF: Staff member
+- USER: Basic authenticated user
+
+### Endpoint Access by Role
+
+#### Authentication Endpoints
+
+- `/auth/register` - Public access
+- `/auth/login` - Public access
+
+#### Inventory Management
+
+- POST `/inventory` - ADMIN, MANAGER
+- GET `/inventory` - ADMIN, MANAGER, STAFF
+- PATCH `/inventory/:id/stock` - ADMIN, MANAGER, STAFF
+
+#### Sales Operations
+
+- POST `/sales` - STAFF, MANAGER
+- GET `/sales/daily` - ADMIN, MANAGER
+
+#### Feedback System
+
+- POST `/feedback` - All authenticated users
+- GET `/feedback` - ADMIN, MANAGER
+
+#### Reporting
+
+- GET `/reports/daily` - ADMIN, MANAGER
+
+#### Restaurant Operations
+
+- POST `/restaurant/reservations` - STAFF, MANAGER
+- POST `/restaurant/orders` - STAFF, MANAGER
+- POST `/restaurant/bills` - STAFF, MANAGER
+
+#### Bookshop Operations
+
+- POST `/bookshop/books` - MANAGER
+- POST `/bookshop/purchases` - STAFF, MANAGER
+- POST `/bookshop/returns` - STAFF, MANAGER
+
+#### Water Production & Distribution
+
+- POST `/water/production` - MANAGER
+- POST `/water/distribution` - STAFF, MANAGER
+- PATCH `/water/distribution/:id` - STAFF, MANAGER
+
 ## Endpoints
 
 ### Authentication
