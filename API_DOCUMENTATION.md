@@ -15,66 +15,8 @@ http://localhost:3000/api
 All endpoints (except for authentication) require a Bearer token. Include the token in the `Authorization` header:
 
 ```
-Authorization
-
-: Bearer <token>
+Authorization : Bearer <token>
 ```
-
-## Role-Based Access Control
-
-The API implements the following user roles with different levels of access:
-
-### Available Roles
-
-- ADMIN: System administrator
-- MANAGER: Business unit manager
-- STAFF: Staff member
-- USER: Basic authenticated user
-
-### Endpoint Access by Role
-
-#### Authentication Endpoints
-
-- `/auth/register` - Public access
-- `/auth/login` - Public access
-
-#### Inventory Management
-
-- POST `/inventory` - ADMIN, MANAGER
-- GET `/inventory` - ADMIN, MANAGER, STAFF
-- PATCH `/inventory/:id/stock` - ADMIN, MANAGER, STAFF
-
-#### Sales Operations
-
-- POST `/sales` - STAFF, MANAGER
-- GET `/sales/daily` - ADMIN, MANAGER
-
-#### Feedback System
-
-- POST `/feedback` - All authenticated users
-- GET `/feedback` - ADMIN, MANAGER
-
-#### Reporting
-
-- GET `/reports/daily` - ADMIN, MANAGER
-
-#### Restaurant Operations
-
-- POST `/restaurant/reservations` - STAFF, MANAGER
-- POST `/restaurant/orders` - STAFF, MANAGER
-- POST `/restaurant/bills` - STAFF, MANAGER
-
-#### Bookshop Operations
-
-- POST `/bookshop/books` - MANAGER
-- POST `/bookshop/purchases` - STAFF, MANAGER
-- POST `/bookshop/returns` - STAFF, MANAGER
-
-#### Water Production & Distribution
-
-- POST `/water/production` - MANAGER
-- POST `/water/distribution` - STAFF, MANAGER
-- PATCH `/water/distribution/:id` - STAFF, MANAGER
 
 ## Endpoints
 
@@ -84,6 +26,7 @@ The API implements the following user roles with different levels of access:
 
 - **URL:** `/auth/register`
 - **Method:** `POST`
+- **Access:** Public
 - **Body:**
   ```json
   {
@@ -106,6 +49,7 @@ The API implements the following user roles with different levels of access:
 
 - **URL:** `/auth/login`
 - **Method:** `POST`
+- **Access:** Public
 - **Body:**
   ```json
   {
@@ -130,6 +74,7 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/inventory`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER
 - **Body:**
   ```json
   {
@@ -158,10 +103,9 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/inventory`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER, STAFF
 - **Query Parameters:**
-
   - `businessUnit (optional)`
-
 - **Response:**
   ```json
   [
@@ -182,6 +126,7 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/inventory/:id/stock`
 - **Method:** `PATCH`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER, STAFF
 - **Body:**
   ```json
   {
@@ -208,6 +153,7 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/sales`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -234,10 +180,9 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/sales/daily`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER
 - **Query Parameters:**
-
   - `businessUnit (optional)`
-
 - **Response:**
   ```json
   [
@@ -259,6 +204,7 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/feedback`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** All authenticated users
 - **Body:**
   ```json
   {
@@ -282,10 +228,9 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/feedback`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER
 - **Query Parameters:**
-
   - `businessUnit (optional)`
-
 - **Response:**
   ```json
   [
@@ -306,10 +251,9 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/reports/daily`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER
 - **Query Parameters:**
-
   - `businessUnit (optional)`
-
 - **Response:**
   ```json
   {
@@ -336,6 +280,7 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/restaurant/reservations`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -359,11 +304,33 @@ The API implements the following user roles with different levels of access:
   }
   ```
 
+#### Get Reservations
+
+- **URL:** `/restaurant/reservations`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "reservation-id",
+      "customerName": "John Doe",
+      "date": "2023-10-01",
+      "time": "18:00",
+      "tableNumber": 5,
+      "guestCount": 4,
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Create Order
 
 - **URL:** `/restaurant/orders`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -397,11 +364,39 @@ The API implements the following user roles with different levels of access:
   }
   ```
 
+#### Get Orders
+
+- **URL:** `/restaurant/orders`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "order-id",
+      "tableNumber": 5,
+      "items": [
+        {
+          "id": "item-id",
+          "name": "Pizza",
+          "quantity": 2,
+          "price": 15.0
+        }
+      ],
+      "totalAmount": 30.0,
+      "status": "PENDING",
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Process Bill
 
 - **URL:** `/restaurant/bills`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -427,6 +422,7 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/bookshop/books`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** MANAGER
 - **Body:**
   ```json
   {
@@ -450,11 +446,33 @@ The API implements the following user roles with different levels of access:
   }
   ```
 
+#### Get Books
+
+- **URL:** `/bookshop/books`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "book-id",
+      "title": "Book Title",
+      "author": "Author Name",
+      "isbn": "1234567890",
+      "price": 20.0,
+      "quantity": 50,
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Process Purchase
 
 - **URL:** `/bookshop/purchases`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -475,11 +493,32 @@ The API implements the following user roles with different levels of access:
   }
   ```
 
+#### Get Purchases
+
+- **URL:** `/bookshop/purchases`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "purchase-id",
+      "bookId": "book-id",
+      "quantity": 2,
+      "totalAmount": 40.0,
+      "customerId": "customer-id",
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Process Return
 
 - **URL:** `/bookshop/returns`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -505,6 +544,7 @@ The API implements the following user roles with different levels of access:
 - **URL:** `/water/production`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** MANAGER
 - **Body:**
   ```json
   {
@@ -525,11 +565,32 @@ The API implements the following user roles with different levels of access:
   }
   ```
 
+#### Get Production
+
+- **URL:** `/water/production`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "production-id",
+      "batchNumber": "batch-001",
+      "quantity": 1000,
+      "productionDate": "2023-10-01",
+      "status": "COMPLETED",
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Create Distribution Order
 
 - **URL:** `/water/distribution`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -550,11 +611,32 @@ The API implements the following user roles with different levels of access:
   }
   ```
 
+#### Get Distribution
+
+- **URL:** `/water/distribution`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "distribution-id",
+      "destination": "Location A",
+      "quantity": 500,
+      "deliveryDate": "2023-10-02",
+      "status": "PENDING",
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Update Distribution Status
 
 - **URL:** `/water/distribution/:id`
 - **Method:** `PATCH`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
