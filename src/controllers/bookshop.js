@@ -3,6 +3,18 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
+const getBooks = asyncHandler(async (req, res) => {
+  const books = await prisma.book.findMany();
+  res.json(books);
+});
+
+const getPurchases = asyncHandler(async (req, res) => {
+  const purchases = await prisma.bookPurchase.findMany({
+    include: { book: true },
+  });
+  res.json(purchases);
+});
+
 const addBook = asyncHandler(async (req, res) => {
   const { title, author, isbn, price, quantity } = req.body;
   const book = await prisma.book.create({
@@ -58,4 +70,10 @@ const processReturn = asyncHandler(async (req, res) => {
   res.status(201).json(bookReturn);
 });
 
-module.exports = { addBook, processPurchase, processReturn };
+module.exports = {
+  getBooks,
+  getPurchases,
+  addBook,
+  processPurchase,
+  processReturn,
+};

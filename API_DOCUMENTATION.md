@@ -15,9 +15,7 @@ http://localhost:3000/api
 All endpoints (except for authentication) require a Bearer token. Include the token in the `Authorization` header:
 
 ```
-Authorization
-
-: Bearer <token>
+Authorization : Bearer <token>
 ```
 
 ## Endpoints
@@ -28,6 +26,7 @@ Authorization
 
 - **URL:** `/auth/register`
 - **Method:** `POST`
+- **Access:** Public
 - **Body:**
   ```json
   {
@@ -50,6 +49,7 @@ Authorization
 
 - **URL:** `/auth/login`
 - **Method:** `POST`
+- **Access:** Public
 - **Body:**
   ```json
   {
@@ -74,6 +74,7 @@ Authorization
 - **URL:** `/inventory`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER
 - **Body:**
   ```json
   {
@@ -102,10 +103,9 @@ Authorization
 - **URL:** `/inventory`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER, STAFF
 - **Query Parameters:**
-
   - `businessUnit (optional)`
-
 - **Response:**
   ```json
   [
@@ -126,6 +126,7 @@ Authorization
 - **URL:** `/inventory/:id/stock`
 - **Method:** `PATCH`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER, STAFF
 - **Body:**
   ```json
   {
@@ -152,6 +153,7 @@ Authorization
 - **URL:** `/sales`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -178,10 +180,9 @@ Authorization
 - **URL:** `/sales/daily`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER
 - **Query Parameters:**
-
   - `businessUnit (optional)`
-
 - **Response:**
   ```json
   [
@@ -203,6 +204,7 @@ Authorization
 - **URL:** `/feedback`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** All authenticated users
 - **Body:**
   ```json
   {
@@ -226,10 +228,9 @@ Authorization
 - **URL:** `/feedback`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER
 - **Query Parameters:**
-
   - `businessUnit (optional)`
-
 - **Response:**
   ```json
   [
@@ -250,10 +251,9 @@ Authorization
 - **URL:** `/reports/daily`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** ADMIN, MANAGER
 - **Query Parameters:**
-
   - `businessUnit (optional)`
-
 - **Response:**
   ```json
   {
@@ -280,6 +280,7 @@ Authorization
 - **URL:** `/restaurant/reservations`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -303,11 +304,33 @@ Authorization
   }
   ```
 
+#### Get Reservations
+
+- **URL:** `/restaurant/reservations`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "reservation-id",
+      "customerName": "John Doe",
+      "date": "2023-10-01",
+      "time": "18:00",
+      "tableNumber": 5,
+      "guestCount": 4,
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Create Order
 
 - **URL:** `/restaurant/orders`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -341,11 +364,39 @@ Authorization
   }
   ```
 
+#### Get Orders
+
+- **URL:** `/restaurant/orders`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "order-id",
+      "tableNumber": 5,
+      "items": [
+        {
+          "id": "item-id",
+          "name": "Pizza",
+          "quantity": 2,
+          "price": 15.0
+        }
+      ],
+      "totalAmount": 30.0,
+      "status": "PENDING",
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Process Bill
 
 - **URL:** `/restaurant/bills`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -371,6 +422,7 @@ Authorization
 - **URL:** `/bookshop/books`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** MANAGER
 - **Body:**
   ```json
   {
@@ -394,11 +446,33 @@ Authorization
   }
   ```
 
+#### Get Books
+
+- **URL:** `/bookshop/books`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "book-id",
+      "title": "Book Title",
+      "author": "Author Name",
+      "isbn": "1234567890",
+      "price": 20.0,
+      "quantity": 50,
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Process Purchase
 
 - **URL:** `/bookshop/purchases`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -419,11 +493,32 @@ Authorization
   }
   ```
 
+#### Get Purchases
+
+- **URL:** `/bookshop/purchases`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "purchase-id",
+      "bookId": "book-id",
+      "quantity": 2,
+      "totalAmount": 40.0,
+      "customerId": "customer-id",
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Process Return
 
 - **URL:** `/bookshop/returns`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -449,6 +544,7 @@ Authorization
 - **URL:** `/water/production`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** MANAGER
 - **Body:**
   ```json
   {
@@ -469,11 +565,32 @@ Authorization
   }
   ```
 
+#### Get Production
+
+- **URL:** `/water/production`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "production-id",
+      "batchNumber": "batch-001",
+      "quantity": 1000,
+      "productionDate": "2023-10-01",
+      "status": "COMPLETED",
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Create Distribution Order
 
 - **URL:** `/water/distribution`
 - **Method:** `POST`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
@@ -494,11 +611,32 @@ Authorization
   }
   ```
 
+#### Get Distribution
+
+- **URL:** `/water/distribution`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
+- **Response:**
+  ```json
+  [
+    {
+      "id": "distribution-id",
+      "destination": "Location A",
+      "quantity": 500,
+      "deliveryDate": "2023-10-02",
+      "status": "PENDING",
+      "createdAt": "2023-10-01T00:00:00.000Z"
+    }
+  ]
+  ```
+
 #### Update Distribution Status
 
 - **URL:** `/water/distribution/:id`
 - **Method:** `PATCH`
 - **Headers:** `Authorization: Bearer <token>`
+- **Access:** STAFF, MANAGER
 - **Body:**
   ```json
   {
