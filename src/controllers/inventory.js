@@ -36,4 +36,24 @@ const updateStock = asyncHandler(async (req, res) => {
   res.json(item);
 });
 
-module.exports = { addItem, getItems, updateStock };
+const getInventorySummary = asyncHandler(async (req, res) => {
+  const inventory = await prisma.inventory.findMany();
+
+  const totalItems = inventory.length;
+  const lowStockItems = inventory.filter(
+    (item) => item.quantity <= item.minStock,
+  ).length;
+  const outOfStockItems = inventory.filter(
+    (item) => item.quantity === 0,
+  ).length;
+
+  const inventoryData = {
+    totalItems,
+    lowStockItems,
+    outOfStockItems,
+  };
+
+  res.json(inventoryData);
+});
+
+module.exports = { addItem, getItems, updateStock, getInventorySummary };

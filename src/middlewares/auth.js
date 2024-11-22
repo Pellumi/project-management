@@ -23,6 +23,7 @@ const protect = asyncHandler(async (req, res, next) => {
 const authorize =
   (...roles) =>
   (req, res, next) => {
+    // console.log("Allowed roles:", roles);
     if (!roles.includes(req.user.role)) {
       res.status(403);
       throw AppError.Unauthorized();
