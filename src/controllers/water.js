@@ -3,6 +3,16 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
+const getProduction = asyncHandler(async (req, res) => {
+  const production = await prisma.waterProduction.findMany();
+  res.json(production);
+});
+
+const getDistribution = asyncHandler(async (req, res) => {
+  const distribution = await prisma.waterDistribution.findMany();
+  res.json(distribution);
+});
+
 const recordProduction = asyncHandler(async (req, res) => {
   const { batchNumber, quantity, productionDate } = req.body;
   const production = await prisma.waterProduction.create({
@@ -41,6 +51,8 @@ const updateDistributionStatus = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getProduction,
+  getDistribution,
   recordProduction,
   createDistributionOrder,
   updateDistributionStatus,
