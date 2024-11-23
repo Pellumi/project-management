@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Book,
   DollarSign,
@@ -32,19 +32,23 @@ import {
 } from "./ui/DropDown";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avatar";
 import { Button } from "./ui/Button";
-
-const navItems = [
-  { name: "Dashboard", href: "/dashboard", icon: Home },
-  { name: "Inventory", href: "/inventory", icon: Package2 },
-  { name: "Sales", href: "/sales", icon: DollarSign },
-  { name: "Restaurant", href: "/restaurant", icon: UtensilsCrossed },
-  { name: "Bookshop", href: "/bookshop", icon: Book },
-  { name: "Water", href: "/water", icon: Droplet },
-  { name: "Feedback", href: "/feedback", icon: MessageSquare },
-  { name: "Report", href: "/reports", icon: Droplet },
-];
+import { Card } from "./ui/Card";
 
 const SideBar = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const navItems = [
+    { name: "Dashboard", href: "/dashboard", icon: Home },
+    { name: "Inventory", href: "/inventory", icon: Package2 },
+    { name: "Sales", href: "/sales", icon: DollarSign },
+    { name: "Restaurant", href: "/restaurant", icon: UtensilsCrossed },
+    { name: "Bookshop", href: "/bookshop", icon: Book },
+    { name: "Water", href: "/water", icon: Droplet },
+    { name: "Feedback", href: "/feedback", icon: MessageSquare },
+    { name: "Report", href: "/reports", icon: Droplet },
+  ];
+
   const pathname = useParams();
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -52,14 +56,21 @@ const SideBar = () => {
     setIsOpen((prev) => !prev);
   };
 
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/login");
+  };
+
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center px-4 py-2">
+        <div className="flex h-[52px] items-center px-4">
           <Package2 className="h-6 w-6 text-primary mr-2" />
           <span className="font-bold text-xl">MaxHelp</span>
         </div>
-        <div className="px-4 py-2">
+        {/* <div className="px-4 py-2">
           <form>
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -70,9 +81,9 @@ const SideBar = () => {
               />
             </div>
           </form>
-        </div>
+        </div> */}
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="flex flex-col justify-center">
         <SidebarMenu>
           <SidebarContent>
             <SidebarMenu>
@@ -94,35 +105,31 @@ const SideBar = () => {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <DropdownMenu open={isOpen} onOpenChange={toggleDropdown}>
-          <DropdownMenuTrigger>
-            <Button variant="ghost" className="w-full justify-start">
-              <Avatar className="h-8 w-8 mr-2">
-                <AvatarFallback>JD</AvatarFallback>
+        <DropdownMenu>
+          <DropdownMenuTrigger onClick={toggleDropdown}>
+            <div className="w-full justify-start bg-transparent">
+              <Avatar className="h-9 w-9 mr-2">
+                <AvatarFallback>MH</AvatarFallback>
               </Avatar>
-              <span>John Doe</span>
-            </Button>
+              <span>{user.role}</span>
+            </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuContent
+            className="w-56 top-[calc(-16px-93px)]"
+            open={isOpen}
+          >
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">John Doe</p>
+                <p className="text-sm font-medium leading-none">{user.role}</p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  john@example.com
+                  {user.email}
                 </p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+            <DropdownMenuItem onClick={() => handleLogOut()}>
+              Log out
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarFooter>
