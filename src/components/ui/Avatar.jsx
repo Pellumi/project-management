@@ -20,7 +20,7 @@ export function AvatarImage({ src, alt }) {
 
 export function AvatarFallback({ children }) {
     return (
-        <div className="flex items-center justify-center w-8 h-8 text-white bg-gray-500 rounded-full">
+        <div className="flex items-center justify-center w-9 h-9 text-white bg-gray-500 rounded-full">
             {children}
         </div>
     );

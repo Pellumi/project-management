@@ -16,8 +16,8 @@ export function SidebarHeader({ children }) {
     );
 }
 
-export function SidebarContent({ children }) {
-    return <div className="flex-1">{children}</div>;
+export function SidebarContent({ children, className="" }) {
+    return <div className={`flex-1 ${className}`}>{children}</div>;
 }
 
 export function SidebarMenu({ children }) {
