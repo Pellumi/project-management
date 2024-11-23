@@ -11,7 +11,7 @@ const Main = () => {
         </div>
         <div className="flex flex-col flex-1">
             {/* <TopBar /> */}
-            <div className="bg-gray-100 rounded-[24px] rounded-b-none overflow-hidden p-4 h-[calc(100%)]"><Outlet /></div>
+            <div className="bg-gray-100 overflow-hidden p-2 h-[full]"><Outlet /></div>
         </div>
     </div>
   )
