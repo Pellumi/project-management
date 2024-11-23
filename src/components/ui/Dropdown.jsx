@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function DropdownMenu({ children, open, onOpenChange }) {
+export function DropdownMenu({ children}) {
     return (
         <div className="relative">
             {(children)}
@@ -8,16 +8,16 @@ export function DropdownMenu({ children, open, onOpenChange }) {
     );
 }
 
-export function DropdownMenuTrigger({ children }) {
+export function DropdownMenuTrigger({ children, onClick }) {
     return (
-        <button className="flex items-center w-full justify-start py-2 px-4 text-left rounded-md bg-transparent hover:bg-gray-700">
+        <button onClick={onClick} className="flex items-center w-full justify-start py-2 px-4 text-left rounded-md bg-transparent hover:bg-gray-700">
             {children}
         </button>
     );
 }
 
-export function DropdownMenuContent({ children, className, align = 'start', forceMount = false }) {
-    return (
+export function DropdownMenuContent({ children, open, className, align = 'start',}) {
+    return open ? (
         <div
             className={`absolute bg-white border border-gray-200 rounded-md shadow-lg mt-2 w-56 z-10 ${className}`}
             style={{ right: align === 'end' ? 0 : 'auto' }}
@@ -27,7 +27,7 @@ export function DropdownMenuContent({ children, className, align = 'start', forc
         >
             {children}
         </div>
-    );
+    ) : null
 }
 
 export function DropdownMenuLabel({ children }) {
